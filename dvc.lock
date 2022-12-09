@@ -1,0 +1,75 @@
+schema: '2.0'
+stages:
+  preprocess_kb:
+    cmd: python src/kb_clean_merge_datasets.py data/open_sanctions.json data/lilsis.json
+    deps:
+    - path: data/open_sanctions.json
+      md5: 3f5e8a3c8d26cdcf1c461b6d711385a9
+      size: 8973
+    - path: src/kb_clean_merge_datasets.py
+      md5: cdedda5a0f14fd89b83a5c99b926d6e3
+      size: 22877
+    outs:
+    - path: data/kb_entities_full.csv
+      md5: 95cddf2aaf879a89ddbd9017f408f6a1
+      size: 3475
+  make_kb:
+    cmd: python src/make_kb.py data/kb_entities_full.csv -o data/kb
+    deps:
+    - path: data/kb_entities_full.csv
+      md5: 95cddf2aaf879a89ddbd9017f408f6a1
+      size: 3475
+    - path: src/make_kb.py
+      md5: c6300f702df7f060b52d03f66e174a30
+      size: 4084
+    outs:
+    - path: data/kb
+      md5: 703a052764bb0f2c153b1d2a2dd142b6.dir
+      size: 9703501
+      nfiles: 2
+  prepare:
+    cmd: python src/prepare_training.py data/el_session_1.jsonl data/el_session_2.jsonl
+      -o data/el -n en_core_web_lg
+    deps:
+    - path: data/el_session_1.jsonl
+      md5: 32d53abbf7105a24e81e44869b6fef23
+      size: 101944
+    - path: data/el_session_2.jsonl
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0
+    - path: src/prepare_training.py
+      md5: 4ce9b1043caf7c93d89d71ed70212873
+      size: 4155
+    outs:
+    - path: data/el_test.spacy
+      md5: ca36b25af7a972ad1d3145404f6cfa7e
+      size: 6178
+    - path: data/el_train.spacy
+      md5: 3a6c181dcbdab3367f9c78f9e9024e8b
+      size: 5943
+  train:
+    cmd: python -m spacy train src/configs/nel.cfg --paths.train data/el_train.spacy
+      --paths.dev data/el_test.spacy --paths.kb data/kb --paths.base_nlp en_core_web_lg
+      --output en-gu-el-1.0 -c src/scripts/custom_functions.py
+    deps:
+    - path: data/el_test.spacy
+      md5: ca36b25af7a972ad1d3145404f6cfa7e
+      size: 6178
+    - path: data/el_train.spacy
+      md5: 3a6c181dcbdab3367f9c78f9e9024e8b
+      size: 5943
+    - path: data/kb
+      md5: 703a052764bb0f2c153b1d2a2dd142b6.dir
+      size: 9703501
+      nfiles: 2
+    - path: src/configs/nel.cfg
+      md5: 2aebfdf82bbf6fb2ca85bfe5aec08385
+      size: 2559
+    - path: src/scripts/custom_functions.py
+      md5: 956ce1d9a10690564d05ab58a838c0e3
+      size: 2961
+    outs:
+    - path: en-gu-el-1.0/
+      md5: a9cac3cd88d94bae1cef88123802a4ea.dir
+      size: 1722151714
+      nfiles: 32

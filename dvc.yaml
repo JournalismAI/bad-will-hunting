@@ -1,0 +1,41 @@
+stages:
+  preprocess_kb:
+    cmd: python src/kb_clean_merge_datasets.py data/open_sanctions.json data/lilsis.json
+    deps:
+    - data/open_sanctions.json
+    - src/kb_clean_merge_datasets.py
+    outs:
+    - data/kb_entities_full.csv
+  make_kb:
+    cmd: python src/make_kb.py data/kb_entities_full.csv -o data/kb
+    deps:
+      - data/kb_entities_full.csv
+      - src/make_kb.py
+    outs:
+      - data/kb
+#  make_nlp:
+#    cmd: python make_nlp.py
+#    deps:
+#      - src/make_nlp.py
+#    outs:
+#      - data/nlp
+  prepare:
+    cmd: python src/prepare_training.py data/el_session_1.jsonl data/el_session_2.jsonl -o data/el -n en_core_web_lg
+    deps:
+      - src/prepare_training.py
+      - data/el_session_1.jsonl
+      - data/el_session_2.jsonl
+    outs:
+      - data/el_train.spacy
+      - data/el_test.spacy
+  train:
+    cmd: python -m spacy train src/configs/nel.cfg --paths.train data/el_train.spacy --paths.dev data/el_test.spacy --paths.kb data/kb --paths.base_nlp en_core_web_lg --output en-gu-el-1.0 -c src/scripts/custom_functions.py
+    deps:
+      - src/scripts/custom_functions.py
+      - src/configs/nel.cfg
+      - data/el_train.spacy
+      - data/el_test.spacy
+      - data/kb
+#      - data/nlp
+    outs:
+      - en-gu-el-1.0/

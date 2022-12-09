@@ -1,0 +1,4 @@
+[core]
+    analytics = false
+    autostage = true
+    remote = storage
