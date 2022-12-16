@@ -19,18 +19,18 @@ This Python repository provides a template of the code required to train a [spaC
 ## Datasets: 
 
 ### Knowledge Bases 
-Our template uses two open-access Knowledge Bases (KBs) of potential interest to investigative reporting, 
+Our code uses two open-access Knowledge Bases (KBs) of potential interest to investigative reporting, 
 namely [Open Sanctions](https://www.opensanctions.org/) and [LittleSis](https://littlesis.org/home/dashboard).
 The complete datasets can be freely obtained from either source under json format.
 
-The template includes pre-processing steps for each KB to transform the raw json data into pandas dataframes. 
+The code includes pre-processing steps for each KB to transform the raw json data into pandas dataframes. 
 Each entity in the processed dataset will have an individual ID, an alias and a description field.
 Please be aware the final dataset still contains redundant entities, i.e. two or more IDs referring to the same "real-world" entity. 
 
 ### Text Documents 
 The documents originally used in this work were article paragraphs acquired through the [Guardian Content API](https://open-platform.theguardian.com/).
-This dataset is interchangeable with any structured text containing named entities that can be linked to the KBs. 
-The text dataset should be used to create annotation files via Prodigy. Please refer the `/prodigy` README.md for more information.  
+This dataset is interchangeable with any text containing named entities that can be linked to the KBs. 
+The text dataset should be used to create annotation files via Prodigy. Please refer to `/prodigy` README.md for more information.  
 
 ### Prodigy annotations 
 Annotations for the training and test datasets were manually generated using [Prodigy](https://prodi.gy/). 
