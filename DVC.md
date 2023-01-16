@@ -2,20 +2,21 @@
 
 - Knowledge Base input files
   (- Knowledge Base )
-  [kb_clean_merge_datasets.py]
+  [kb_clean_merge_datasets.py, make_kb.py]
 - Enriched candidate data
 - Input data
 - Annotation data
   
 - Spacy config
 - Spacy meta.json
-- Spacy model??
-  [prepare_training.py, train.py]
+- Spacy model
+  [prepare_training.py]
 
 # Pipeline
 
 - Make KB from input files (includes cleaning)
-
+- Convert KB and text datasets into spaCy Docs
+- Trigger spaCy model training
 
 
 ## Annotation data
